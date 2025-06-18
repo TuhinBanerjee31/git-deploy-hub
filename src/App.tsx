@@ -176,18 +176,21 @@ export default function App() {
               description="Automate the build process from your repository"
               active={loading}
               blinking={loading && !deploymentComplete}
+              animationDelay={0}
             />
             <ActionCard
               icon={Package}
               title="SHIP IT"
               description="Deploy with seamless CI/CD integration"
               blinking={loading && !deploymentComplete}
+              animationDelay={1}
             />
             <ActionCard
               icon={Rocket}
               title="LAUNCH IT"
               description="Deploy to global edge network"
               blinking={loading && !deploymentComplete}
+              animationDelay={2}
             />
           </div>
 
