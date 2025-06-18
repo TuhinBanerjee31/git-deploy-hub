@@ -99,7 +99,7 @@ export default function App() {
                 </div>
                 
                 <div className="flex items-center space-x-3">
-                  <span className="text-green-600/80 text-sm shrink-0">></span>
+                  <span className="text-green-600/80 text-sm shrink-0">&gt;</span>
                   <Input
                     disabled={loading}
                     value={repoURL}
