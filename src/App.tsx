@@ -76,6 +76,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-black text-green-400 font-mono relative overflow-hidden">
+      <style jsx>{`
+        @keyframes scale {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+        }
+      `}</style>
+      
       {/* Background Effects */}
       <div className="absolute inset-0 bg-gradient-to-br from-green-900/5 to-black"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(34,197,94,0.1),transparent_50%)]"></div>
@@ -139,7 +146,7 @@ export default function App() {
                   {(deployPreviewURL || logs.length > 0) && (
                     <Button
                       onClick={handleClearDeployment}
-                      disabled={false}
+                      disabled={loading}
                       variant="outline"
                       className="px-6 py-3 text-sm tracking-wider"
                     >
@@ -175,22 +182,22 @@ export default function App() {
               title="BUILD IT"
               description="Automate the build process from your repository"
               active={loading}
-              blinking={loading && !deploymentComplete}
+              scaling={loading && !deploymentComplete}
               animationDelay={0}
             />
             <ActionCard
               icon={Package}
               title="SHIP IT"
               description="Deploy with seamless CI/CD integration"
-              blinking={loading && !deploymentComplete}
-              animationDelay={1}
+              scaling={loading && !deploymentComplete}
+              animationDelay={0.7}
             />
             <ActionCard
               icon={Rocket}
               title="LAUNCH IT"
               description="Deploy to global edge network"
-              blinking={loading && !deploymentComplete}
-              animationDelay={2}
+              scaling={loading && !deploymentComplete}
+              animationDelay={1.4}
             />
           </div>
 
