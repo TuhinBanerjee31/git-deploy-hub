@@ -7,17 +7,25 @@ interface ActionCardProps {
   title: string;
   description: string;
   active?: boolean;
+  blinking?: boolean;
 }
 
-export function ActionCard({ icon: Icon, title, description, active = false }: ActionCardProps) {
+export function ActionCard({ icon: Icon, title, description, active = false, blinking = false }: ActionCardProps) {
   return (
     <div className={cn(
       "border border-green-500/30 rounded-lg p-6 bg-black/20 backdrop-blur-sm transition-all duration-200 hover:border-green-500/60 hover:bg-green-500/5",
-      active && "border-green-500 bg-green-500/10"
+      active && "border-green-500 bg-green-500/10",
+      blinking && "animate-pulse border-green-400 bg-green-500/20"
     )}>
       <div className="flex flex-col items-center text-center space-y-3">
-        <Icon className="w-8 h-8 text-green-400" />
-        <h3 className="text-green-400 font-semibold text-sm tracking-wider uppercase">
+        <Icon className={cn(
+          "w-8 h-8 text-green-400",
+          blinking && "animate-bounce"
+        )} />
+        <h3 className={cn(
+          "text-green-400 font-semibold text-sm tracking-wider uppercase",
+          blinking && "animate-pulse"
+        )}>
           {title}
         </h3>
         <p className="text-green-600/80 text-xs leading-relaxed">

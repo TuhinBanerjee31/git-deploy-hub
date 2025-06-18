@@ -1,3 +1,4 @@
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { Button } from "./components/custom/button";
@@ -41,6 +42,14 @@ export default function App() {
       socket.emit("subscribe", `logs:${projectSlug}`);
     }
   }, [projectId, repoURL]);
+
+  const handleClearDeployment = useCallback(() => {
+    setURL("");
+    setLogs([]);
+    setLoading(false);
+    setProjectId(undefined);
+    setDeployPreviewURL(undefined);
+  }, []);
 
   const handleSocketIncommingMessage = useCallback((message: string) => {
     console.log(`[Incomming Socket Message]:`, typeof message, message);
@@ -109,15 +118,26 @@ export default function App() {
                   />
                 </div>
 
-                <div className="flex justify-center">
+                <div className="flex justify-center space-x-4">
                   <Button
                     onClick={handleClickDeploy}
                     disabled={!isValidURL[0] || loading}
                     variant="terminal"
                     className="px-8 py-3 text-sm tracking-wider"
                   >
-                    {loading ? "⚡ DEPLOY" : "⚡ DEPLOY"}
+                    {loading ? "⚡ DEPLOYING" : "⚡ DEPLOY"}
                   </Button>
+                  
+                  {(deployPreviewURL || logs.length > 0) && (
+                    <Button
+                      onClick={handleClearDeployment}
+                      disabled={loading}
+                      variant="outline"
+                      className="px-6 py-3 text-sm tracking-wider"
+                    >
+                      NEW DEPLOYMENT
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
@@ -147,16 +167,19 @@ export default function App() {
               title="BUILD IT"
               description="Automate the build process from your repository"
               active={loading}
+              blinking={loading}
             />
             <ActionCard
               icon={Package}
               title="SHIP IT"
               description="Deploy with seamless CI/CD integration"
+              blinking={loading}
             />
             <ActionCard
               icon={Rocket}
               title="LAUNCH IT"
               description="Deploy to global edge network"
+              blinking={loading}
             />
           </div>
 
