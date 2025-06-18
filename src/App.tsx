@@ -1,9 +1,8 @@
-
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { Button } from "./components/custom/button";
 import { Input } from "./components/custom/input";
-import { Github, Build, Ship, Launch } from "lucide-react";
+import { Github, Hammer, Package, Rocket } from "lucide-react";
 import { ActionCard } from "./components/ActionCard";
 import axios from "axios";
 
@@ -144,18 +143,18 @@ export default function App() {
           {/* Action Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             <ActionCard
-              icon={Build}
+              icon={Hammer}
               title="BUILD IT"
               description="Automate the build process from your repository"
               active={loading}
             />
             <ActionCard
-              icon={Ship}
+              icon={Package}
               title="SHIP IT"
               description="Deploy with seamless CI/CD integration"
             />
             <ActionCard
-              icon={Launch}
+              icon={Rocket}
               title="LAUNCH IT"
               description="Deploy to global edge network"
             />
