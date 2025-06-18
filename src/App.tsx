@@ -1,4 +1,3 @@
-
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { Button } from "./components/custom/button";
@@ -15,6 +14,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [projectId, setProjectId] = useState<string | undefined>();
   const [deployPreviewURL, setDeployPreviewURL] = useState<string | undefined>();
+  const [deploymentComplete, setDeploymentComplete] = useState(false);
 
   const logContainerRef = useRef<HTMLElement>(null);
 
@@ -28,6 +28,7 @@ export default function App() {
 
   const handleClickDeploy = useCallback(async () => {
     setLoading(true);
+    setDeploymentComplete(false);
 
     const { data } = await axios.post(import.meta.env.VITE_BACKEND_URL, {
       gitURL: repoURL,
@@ -49,6 +50,7 @@ export default function App() {
     setLoading(false);
     setProjectId(undefined);
     setDeployPreviewURL(undefined);
+    setDeploymentComplete(false);
   }, []);
 
   const handleSocketIncommingMessage = useCallback((message: string) => {
@@ -56,6 +58,12 @@ export default function App() {
     const { log } = JSON.parse(message);
     setLogs((prev) => [...prev, log]);
     logContainerRef.current?.scrollIntoView({ behavior: "smooth" });
+    
+    // Check if deployment is complete
+    if (log.includes("Deployment completed") || log.includes("Build completed") || log.includes("✓")) {
+      setLoading(false);
+      setDeploymentComplete(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -131,7 +139,7 @@ export default function App() {
                   {(deployPreviewURL || logs.length > 0) && (
                     <Button
                       onClick={handleClearDeployment}
-                      disabled={loading}
+                      disabled={false}
                       variant="outline"
                       className="px-6 py-3 text-sm tracking-wider"
                     >
@@ -167,19 +175,19 @@ export default function App() {
               title="BUILD IT"
               description="Automate the build process from your repository"
               active={loading}
-              blinking={loading}
+              blinking={loading && !deploymentComplete}
             />
             <ActionCard
               icon={Package}
               title="SHIP IT"
               description="Deploy with seamless CI/CD integration"
-              blinking={loading}
+              blinking={loading && !deploymentComplete}
             />
             <ActionCard
               icon={Rocket}
               title="LAUNCH IT"
               description="Deploy to global edge network"
-              blinking={loading}
+              blinking={loading && !deploymentComplete}
             />
           </div>
 
